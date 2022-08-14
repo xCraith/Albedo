@@ -59,7 +59,6 @@ class BaseCommands(Extension):
             embed.set_footer(text="The Great Tomb of Nazarick")
             await channel.send(embeds=eb)
 
-# Test
 
 def setup(bot):
     BaseCommands(bot)

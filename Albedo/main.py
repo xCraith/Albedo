@@ -1,4 +1,4 @@
-from naff import Client, Intents, listen, const, Activity, ActivityType
+from naff import Client, Intents, Permissions, InteractionContext, OptionTypes, listen, const, Activity, ActivityType, slash_command, slash_option, slash_default_member_permission
 import logging
 import os
 import config
@@ -18,7 +18,6 @@ async def on_ready():
     print("Ready")
     print(f"This bot is owned by {bot.owner}")
     await bot.change_presence(activity=Activity(type=ActivityType.WATCHING, name=f"The Great Tomb of Nazarick"))
-
 @listen()
 async def on_member_add(event):
     channel = await bot.fetch_channel(1007597562607452190)
@@ -41,5 +40,27 @@ for file in os.listdir("./commands"):
 for file in os.listdir("./automod"):
     if file.endswith(".py"):
         bot.load_extension(f'automod.{file[:-3]}')
+
+for file in os.listdir("./moderation"):
+    if file.endswith(".py"):
+        bot.load_extension(f'moderation.{file[:-3]}')
+
+@slash_command(name="reload", description="Reload a Cog")
+@slash_default_member_permission(Permissions.ADMINISTRATOR)
+@slash_option(
+    name = "cog",
+    description = "Cog",
+    required = True,
+    opt_type = OptionTypes.STRING
+
+)
+async def reload(ctx: InteractionContext, cog):
+    if ctx.author.id == 447000659871662081:
+        for file in os.listdir(f"./{cog}"):
+            if file.endswith(".py"):
+                bot.reload_extension(f'{cog}.{file[:-3]}')
+        await ctx.send(f"{cog} sucessfully reloaded")
+    else:
+        await ctx.send("You have no permissions to run this command.")
 
 bot.start(config.token)
