@@ -19,42 +19,42 @@ async def ConnectQuery():
 
 
 class mute_system(Extension):
-    @slash_command(name="mute", description="Einen User muten")
+    @slash_command(name="mute", description="Mute a User")
     @slash_default_member_permission(Permissions.MOVE_MEMBERS)
     @slash_option(
         name="user",
-        description="User angeben",
+        description="Use",
         required=True,
         opt_type=OptionTypes.USER,
     )
     @slash_option(
-        name="dauer",
-        description="Grund angeben",
+        name="dur",
+        description="Duration",
         required=True,
         opt_type=OptionTypes.STRING
     )
     @slash_option(
-        name="grund",
-        description="Grund angeben",
+        name="rs",
+        description="Reason",
         required=True,
         opt_type=OptionTypes.STRING
     )
-    async def mute(self, ctx:InteractionContext, user, dauer, grund=None):
+    async def mute(self, ctx:InteractionContext, user, dur, rs=None):
         guild = ctx.guild
-        rolle = await ctx.guild.fetch_role(993305749763661875)
+        rolle = await ctx.guild.fetch_role(1008150035038490625)
         time_convert = {"s":1, "m":60, "h":3600, "d":86400, "w":604800, "mo":18144000, "y":31536000}
-        tempmute= int(dauer[:-1]) * time_convert[dauer[-1]]
-        channel = await self.bot.fetch_channel(993306264346050672)
+        tempmute= int(dur[:-1]) * time_convert[dur[-1]]
+        channel = await self.bot.fetch_channel(1008146194024898620)
         dbmute = datetime.now() + timedelta(seconds=tempmute)
         db = await ConnectQuery()
 
         if user.has_role(rolle):
-            await ctx.send("User ist bereits gemuted")
+            await ctx.send("User is already muted")
         else:
             embed = naff.Embed(
                 title="Muted",
                 color="#f5b642",
-                description=f"<@{user.id}> wurde für **{dauer}** gemuted",
+                description=f"<@{user.id}> got muted for **{dur}**",
             )
             embed.set_footer(text="NK Community")
             embed.timestamp = datetime.now()
@@ -62,7 +62,7 @@ class mute_system(Extension):
             eb = naff.Embed(
                 title="Mute Log",
                 color="#f5b642",
-                description=f"<@{ctx.author.id}> hat den User <@{user.id}> mit dem Grund **{grund}** für {dauer} gemuted",
+                description=f"<@{ctx.author.id}> muted the user <@{user.id}> because **{rs}** for {dur}",
             )
             eb.set_footer(text="NK Community")
             eb.timestamp = datetime.now()
@@ -84,7 +84,7 @@ class mute_system(Extension):
     @Task.create(IntervalTrigger(seconds=30))
     async def unmute_task(self):
         db = await ConnectQuery()
-        guild = self.bot.get_guild(401479187694747690)
+        guild = self.bot.get_guild(1007597560296382475)
         cursor = db.cursor()
         cursor.execute(f"SELECT * FROM mute WHERE dauer <= '{datetime.now()}'")
         users = cursor.fetchall()
@@ -100,11 +100,11 @@ class mute_system(Extension):
                 channel = await self.bot.fetch_channel(993526422075347087)
                 eb = naff.Embed(
                     title="Automod Log",
-                    color="#f5b642",
-                    description=f"<@{member.id}> Wurde entmuted \n"
-                                f"**Grund:** Mute abgelaufen",
+                    color="#800080",
+                    description=f"<@{member.id}> was unmuted \n"
+                                f"**Grund:** Mute expired",
                 )
-                eb.set_footer(text="NK Community")
+                eb.set_footer(text="The Great Tomb of Nazarick")
                 eb.timestamp = datetime.now()
                 await channel.send(embeds=eb)
 
@@ -117,34 +117,35 @@ class mute_system(Extension):
             await channel.add_permission(target=role, deny=[Permissions.SEND_MESSAGES])
         await ctx.send("done")
 
-    @slash_command(name="unmute", description="Einen User entmuten")
+    @slash_command(name="unmute", description="Unmute a User")
     @slash_default_member_permission(Permissions.MOVE_MEMBERS)
     @slash_option(
         name="user",
-        description="User angeben",
+        description="User",
         required=True,
         opt_type=OptionTypes.USER,
     )
     @slash_option(
-        name="grund",
-        description="Grund angeben",
+        name="rs",
+        description="Reason",
         required=True,
         opt_type=OptionTypes.STRING
     )
-    async def unmute(self, ctx:InteractionContext, user, grund):
-        rolle = await ctx.guild.fetch_role(993305749763661875)
+    async def unmute(self, ctx:InteractionContext, user, rs):
+        rolle = await ctx.guild.fetch_role(1008150035038490625)
         if rolle not in user.roles:
-            await ctx.send("User ist nicht gemuted")
+            await ctx.send("User is not muted")
         else:
             await user.remove_role(rolle)
-            await ctx.send(f"<@{user.id}> wurde erfolgreich unmuted")
-            channel = await self.bot.fetch_channel(993306264346050672)
+            await ctx.send(f"<@{user.id}> sucessfully got unmuted")
+            channel = await self.bot.fetch_channel(1008146194024898620)
             eb = naff.Embed(
                 title="Mute Log",
-                color="#f5b642",
-                description=f"<@{ctx.author.id}> hat den User <@{user.id}> mit dem Grund **{grund}** entmuted",
+                color="#800080",
+                description=f"<@{ctx.author.id}> unmuted the User <@{user.id}> \n"
+                            f"Reason: **{rs}**",
             )
-            eb.set_footer(text="NK Community")
+            eb.set_footer(text="The Great Tomb of Nazarick")
             eb.timestamp = datetime.now()
             await channel.send(embeds=eb)
 
