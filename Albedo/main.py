@@ -18,6 +18,7 @@ async def on_ready():
     print("Ready")
     print(f"This bot is owned by {bot.owner}")
     await bot.change_presence(activity=Activity(type=ActivityType.WATCHING, name=f"The Great Tomb of Nazarick"))
+    await bot.remove_command("nickname")
 @listen()
 async def on_member_add(event):
     channel = await bot.fetch_channel(1007597562607452190)
@@ -44,6 +45,10 @@ for file in os.listdir("./automod"):
 for file in os.listdir("./moderation"):
     if file.endswith(".py"):
         bot.load_extension(f'moderation.{file[:-3]}')
+
+for file in os.listdir("./autorole"):
+    if file.endswith(".py"):
+        bot.load_extension(f'autorole.{file[:-3]}')
 
 @slash_command(name="reload", description="Reload a Cog")
 @slash_default_member_permission(Permissions.ADMINISTRATOR)
