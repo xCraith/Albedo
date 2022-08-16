@@ -1,16 +1,17 @@
 import naff
 from naff import Client, Intents, slash_command, InteractionContext, OptionTypes, slash_option, Extension, \
     slash_default_member_permission, Permissions
+import mysql.connector
 
-"""async def ConnectQuery():
+async def ConnectQuery():
     db = mysql.connector.connect(
         host="localhost",
         user="main",
         password="vT69Ij9KiDlpfL6R",
-        database="bot",
+        database="albedo",
     )
     cursor = db.cursor()
-    return db"""
+    return db
 
 
 
@@ -58,6 +59,22 @@ class BaseCommands(Extension):
             )
             embed.set_footer(text="The Great Tomb of Nazarick")
             await channel.send(embeds=eb)
+
+
+    @slash_command(name="nickname", description="Set your Nickname")
+    @slash_option(name="name", description="Your nickname", required=True, opt_type = OptionTypes.STRING)
+    async def set_nickname(self, ctx:InteractionContext, name):
+        db = await ConnectQuery()
+        cursor = db.cursor()
+        await ctx.author.edit_nickname(new_nickname=f"{name}")
+        await ctx.send("Sucessfully changed your nickname!")
+        sql = "INSERT INTO autorole (discordid, nick) VALUES (%s, %s)"
+        val = (ctx.author.id, name)
+        cursor.execute(sql, val)
+        db.commit()
+        db.close()
+
+
 
 
 def setup(bot):
