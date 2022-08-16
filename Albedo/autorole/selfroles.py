@@ -78,55 +78,54 @@ class selfroles(Extension):
     async def on_component(self, event: Component):
         guild = self.bot.get_guild(1007597560296382475)
         ctx = event.context
-        if ctx.author.has_role(1009164916323778624):
-            return
+        if not ctx.author.has_role(1009164916323778624):
+            await ctx.author.add_role(1009164916323778624)
         else:
-            await ctx.author_add_role(1009164916323778624)
-        match ctx.custom_id:
-            case "mal":
-                role = guild.get_role(role_id=1009165004613877820)
-                if ctx.author.has_role(role):
-                    await ctx.author.remove_role(role)
-                    await ctx.send("done", ephemeral=True)
-                else:
-                    await ctx.author.add_role(role)
-                    await ctx.send("done", ephemeral=True)
+            match ctx.custom_id:
+                case "mal":
+                    role = guild.get_role(role_id=1009165004613877820)
+                    if ctx.author.has_role(role):
+                        await ctx.author.remove_role(role)
+                        await ctx.send("done", ephemeral=True)
+                    else:
+                        await ctx.author.add_role(role)
+                        await ctx.send("done", ephemeral=True)
 
-            case "fem":
-                role = guild.get_role(role_id=1009165061396385872)
-                if ctx.author.has_role(role):
-                    await ctx.author.remove_role(role)
-                    await ctx.send("Done", empehmeral=True)
-                else:
-                    await ctx.author.add_role(role)
-                    await ctx.send("done", ephemeral=True)
+                case "fem":
+                    role = guild.get_role(role_id=1009165061396385872)
+                    if ctx.author.has_role(role):
+                        await ctx.author.remove_role(role)
+                        await ctx.send("Done", empehmeral=True)
+                    else:
+                        await ctx.author.add_role(role)
+                        await ctx.send("done", ephemeral=True)
 
-            case "dps":
-                role = guild.get_role(role_id=1009175620372136057)
-                if ctx.author.has_role(role):
-                    await ctx.author.remove_role(role)
-                    await ctx.send("done", ephemeral=True)
-                else:
-                    await ctx.author.add_role(role)
-                    await ctx.send("done", ephemeral=True)
+                case "dps":
+                    role = guild.get_role(role_id=1009175620372136057)
+                    if ctx.author.has_role(role):
+                        await ctx.author.remove_role(role)
+                        await ctx.send("done", ephemeral=True)
+                    else:
+                        await ctx.author.add_role(role)
+                        await ctx.send("done", ephemeral=True)
 
-            case "tank":
-                role = guild.get_role(role_id=1009175748629770301)
-                if ctx.author.has_role(role):
-                    await ctx.author.remove_role(role)
-                    await ctx.send("done", ephemeral=True)
-                else:
-                    await ctx.author.add_role(role)
-                    await ctx.send("done", ephemeral=True)
+                case "tank":
+                    role = guild.get_role(role_id=1009175748629770301)
+                    if ctx.author.has_role(role):
+                        await ctx.author.remove_role(role)
+                        await ctx.send("done", ephemeral=True)
+                    else:
+                        await ctx.author.add_role(role)
+                        await ctx.send("done", ephemeral=True)
 
-            case "sup":
-                role = guild.get_role(role_id=1009175878657392800)
-                if ctx.author.has_role(role):
-                    await ctx.author.remove_role(role)
-                    await ctx.send("done", ephemeral=True)
-                else:
-                    await ctx.author.add_role(role)
-                    await ctx.send("done", ephemeral=True)
+                case "sup":
+                    role = guild.get_role(role_id=1009175878657392800)
+                    if ctx.author.has_role(role):
+                        await ctx.author.remove_role(role)
+                        await ctx.send("done", ephemeral=True)
+                    else:
+                        await ctx.author.add_role(role)
+                        await ctx.send("done", ephemeral=True)
 
 
 
