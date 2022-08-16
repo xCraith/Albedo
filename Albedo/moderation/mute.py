@@ -11,7 +11,7 @@ async def ConnectQuery():
         host="localhost",
         user="main",
         password="vT69Ij9KiDlpfL6R",
-        database="bot",
+        database="albedo",
     )
     cursor = db.cursor()
     return db
@@ -91,8 +91,8 @@ class mute_system(Extension):
         rolle = await guild.fetch_role(1008150035038490625)
         for user in users:
             if user[2] is not None:
-                member = await self.bot.fetch_member(user[1], 1007597560296382475)
-                await member.remove_role(rolle)
+                usr = await self.bot.fetch_member(user[1], 1007597560296382475)
+                await usr.remove_role(rolle)
                 dlt = "DELETE FROM mute WHERE discordid = {0}".format(user[1])
                 cursor.execute(dlt)
                 db.commit()
@@ -101,8 +101,8 @@ class mute_system(Extension):
                 eb = naff.Embed(
                     title="Automod Log",
                     color="#800080",
-                    description=f"<@{member.id}> was unmuted \n"
-                                f"**Grund:** Mute expired",
+                    description=f"<@{usr.id}> was unmuted \n"
+                                f"**Reason:** Mute expired",
                 )
                 eb.set_footer(text="The Great Tomb of Nazarick")
                 eb.timestamp = datetime.now()
