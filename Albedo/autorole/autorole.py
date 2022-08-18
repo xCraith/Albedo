@@ -19,31 +19,42 @@ async def ConnectQuery():
 class autorole(Extension):
     @listen()
     async def on_member_update(self, event):
-        guild = self.bot.get_guild(1007597560296382475)
         db = await ConnectQuery()
+        guild = self.bot.get_guild(1007597560296382475)
+        cursor = db.cursor()
+        cursor.execute(f"SELECT * FROM autorole WHERE discordid = '{event.after.id}'")
+        users = cursor.fetchall()
+        print(users)
         gmember = await guild.fetch_role(1007597560296382480)
         vmember = await guild.fetch_role(1007597560296382481)
         pl = await guild.fetch_role(1007597560376066129)
         go = await guild.fetch_role(1007597560376066130)
         gd = await guild.fetch_role(1007597560296382482)
         fm = await guild.fetch_role(1007597560376066131)
-        cursor = db.cursor()
-        cursor.execute(f"SELECT * FROM autorole WHERE discordid = '{event.after.id}'")
-        users = cursor.fetchall()
-        print(users)
-        for user in users:
-            if event.after.has_role(gmember):
-                await event.after.edit_nickname(new_nickname=f"⊰Member⊱ {user[2]}")
-            elif event.after.has_role(vmember):
-                await event.after.edit_nickname(new_nickname=f"⊰Vet. Member⊱ {user[2]}")
-            elif event.after.has_role(pl):
-                await event.after.edit_nickname(new_nickname=f"⊰Pleiades⊱ {user[2]}")
-            elif event.after.has_role(go):
-                await event.after.edit_nickname(new_nickname=f"⊰Officer⊱ {user[2]}")
-            elif event.after.has_role(gd):
-                await event.after.edit_nickname(new_nickname=f"⊰Guardian⊱ {user[2]}")
-            elif event.after.has_role(fm):
-                await event.after.edit_nickname(new_nickname=f"⊰Fo. Member⊱ {user[2]}")
+
+
+        if len(event.before.roles) == len(event.after.roles):
+            return
+        if event.after.has_role(gmember):
+            await event.after.edit_nickname(new_nickname=f"⊰Member⊱ {users[0][2]}")
+            if event.after.nick != event.before.nick or event.after.nick == event.before.nick:
+                return
+        elif event.after.has_role(vmember):
+            await event.after.edit_nickname(new_nickname=f"⊰Vet. Member⊱ {users[0][2]}")
+
+        elif event.after.has_role(pl):
+            await event.after.edit_nickname(new_nickname=f"⊰Pleiades⊱ {users[0][2]}")
+
+        elif event.after.has_role(go):
+            await event.after.edit_nickname(new_nickname=f"⊰Officer⊱ {users[0][2]}")
+
+        elif event.after.has_role(gd):
+            await event.after.edit_nickname(new_nickname=f"⊰Guardian⊱ {users[0][2]}")
+
+        elif event.after.has_role(fm):
+            await event.after.edit_nickname(new_nickname=f"⊰Fo. Member⊱ {users[0][2]}")
+
+
 
 
 def setup(bot):
