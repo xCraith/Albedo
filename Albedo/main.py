@@ -18,12 +18,14 @@ async def on_ready():
     print("Ready")
     print(f"This bot is owned by {bot.owner}")
     await bot.change_presence(activity=Activity(type=ActivityType.WATCHING, name=f"The Great Tomb of Nazarick"))
-    await bot.remove_command("nickname")
+
 @listen()
 async def on_member_add(event):
     channel = await bot.fetch_channel(1007597562607452190)
     await channel.send(f"Welcome {event.member.mention} to the Great Tomb of Nazarick!")
     await event.member.add_role(1007597560296382478)
+    await event.member.add_role(1007597560296382483)
+    await event.member.edit_nickname(new_nickname=f"⊰Visitor⊱{event.member.username}")
 
 """@listen()
 async def on_member_remove(event):
@@ -33,7 +35,7 @@ async def on_member_remove(event):
 for file in os.listdir("./logs"):
     if file.endswith(".py"):
         bot.load_extension(f'logs.{file[:-3]}')
-
+#
 for file in os.listdir("./commands"):
     if file.endswith(".py"):
         bot.load_extension(f'commands.{file[:-3]}')
