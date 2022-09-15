@@ -106,7 +106,7 @@ class mute_system(Extension):
                 )
                 eb.set_footer(text="The Great Tomb of Nazarick")
                 eb.timestamp = datetime.now()
-                await channel.send(embeds=eb)
+            await channel.send(embeds=eb)
 
     @slash_command(name="setup", description="mute setup")
     @slash_default_member_permission(Permissions.ADMINISTRATOR)
